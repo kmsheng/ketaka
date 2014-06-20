@@ -1,0 +1,34 @@
+{
+  "name": "ketaka",
+  "repo": "https://github.com/karmapa17/ketaka",
+  "description": "hello world",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "ksanaforge/boot": "*",
+    "socketio/socketio": "*",
+    "brighthas/bootstrap": "*",
+    "ksana/document": "*",
+    "ksanaforge/kse": "*",
+    "component/jquery": "*",
+    "ketaka/main": "*",
+    "ketaka/comp1": "*"
+  },
+  "development": {},
+  "paths": [
+    "components",
+    "../components",
+    "../node_modules/"
+  ],
+  "local": [
+    "facebook/react"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ],
+  "styles": [
+    "index.css"
+  ]
+}
