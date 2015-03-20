@@ -1,0 +1,12 @@
+{
+	"files":["workshop/settings.json",
+		 "workshop/passwd.json",
+		 "workshop/dhammagear.png",
+		 "workshop/svg"
+	],
+	"repos":["node_modules/ksana-document",
+				"node_modules/yadb",
+			"node_modules/yase"
+	],
+	"name":"ksanaforge"
+}

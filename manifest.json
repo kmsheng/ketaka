@@ -1,8 +1,8 @@
 {
-"name": "ketaka",
+"name": "dhammagear-workshop",
 "version": "0.1",
 "manifest_version": 2,
-"description": "ketaka",
+"description": "dhammagear-workshop",
 "icons": { "16": "icons/icon16.png",
           "48": "icons/icon48.png",
 	    "128": "icons/icon128.png" },

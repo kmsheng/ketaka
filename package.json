@@ -1,18 +1,20 @@
 {
-  "name": "ketaka",
-  "description": "New application",
-  "version": "0.0.1",
-  "main": "index.html",
-  "single-instance":true,
-  "window": {
-    "toolbar": true,
-    "width": 1060,
-    "height": 700
-  },
+ "name": "ksanaforge-workshop",
+ "description": "New application",
+ "version": "0.0.1",
+ "main": "index.html",
+  "inject-js-start":"nwmain.js",
+ "single-instance": true,
+ "window": {
+  "toolbar": true,
+  "width": 1400,
+  "height": 860,
+  "icon": "dhammagear.png"
+ },
  "repositories": [
   {
-            "type": "git", 
-            "url": "https://github.com/karmapa17/ketaka"
-       }  
-    ]
+   "type": "git",
+   "url": "https://github.com/ksanaforge/workshop.git"
+  }
+ ]
 }
