@@ -481,3 +481,11 @@ hl[n="2"] {background-color:lightgreen}
     font-size: 1em;
     line-height: 2.5em;
 }
+
+.input-lg {
+  height: 65px;
+  padding: 5px 5px;
+  font-size: 22px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
