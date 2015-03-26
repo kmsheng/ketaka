@@ -47,11 +47,7 @@ var inlinedialog_comment_tibetan = React.createClass({
     if (this.refs.comment) this.refs.comment.getDOMNode().focus();
   },
   componentDidMount:function() {
-    this.refs.comment.getDOMNode().value = this.markup().hint;
     setTimeout(this.focus,300);
-  },
-  componentDidUpdate:function() {
-    this.refs.comment.getDOMNode().value = this.markup().hint;
   },
 });
 module.exports=inlinedialog_comment_tibetan;
