@@ -40,7 +40,7 @@ var inlinedialog_applychange = React.createClass({
     this.props.action("nextmistake","next");
   },
   myanwser:function() {
-    var inputtext=this.refs.inputtext.getDOMNode().value;
+    var inputtext=this.refs.inputtext.getDOMNode().value||this.refs.origintext.getDOMNode().innerHTML;
     var payload={type:"revision" ,text:inputtext};
     var m=this.props.markup;
     this.props.action("addmarkup",payload,true);
@@ -104,7 +104,7 @@ var inlinedialog_applychange = React.createClass({
       <div>
         <input type="range" id="points" min="0" max="10" defaultValue="0" style={{width:"500px"}} onMouseUp={this.ac_moveto}></input>
        </div> 
-      <span className="col-md-6">{this.props.text}</span>
+      <span className="col-md-6"><span ref="origintext">{this.props.text}</span></span>
       <span className="col-md-3"><button className="btn btn-warning ignore_button control_S-halfsize" style={{marginLeft:"-8px"}} onClick={this.close}>Ignore</button></span>
       <span className="col-md-3"><button className="btn btn-danger control_S-halfsize" style={{marginLeft:"-8px"}} onClick={this.myanwser} >Reject</button></span>
       <hr />
