@@ -36,6 +36,12 @@ var FileListing = React.createClass({
     this.setState({selected:i});
     this.props.onOpenFile(i);
   },
+  getSegNameInFile:function(i) {
+      var segnames=this.props.kde.get("segnames");
+      var filerange=this.props.kde.getFileRange(i);
+      
+      return {start:segnames[filerange[0]],end: segnames[filerange[1]]}
+  },
   renderFiles:function() {
     var cls="",out=[], filestart=this.props.start;
     for (var i=0;i<this.props.files.length;i++) {
@@ -43,6 +49,7 @@ var FileListing = React.createClass({
       if (this.props.hits) hit=this.props.hits[filestart+i]?this.props.hits[filestart+i].length:"";
       if (!hit) hit="";
       if (i==this.state.selected) cls="success"; else cls="";
+	  var segnames=this.getSegNameInFile(i);
       out.push(<tr key={'f'+i} onClick={this.select} 
            onMouseEnter={this.hoverFile} onMouseLeave={this.leave}
            className={cls} data-i={i}>
@@ -50,7 +57,8 @@ var FileListing = React.createClass({
         
         <span className="label label-info">{hit}</span>
         <span className="pull-right" style={{visibility:this.state.hovered==i?"":"hidden"}}>
-        <button className="btn btn-success"  onClick={this.openfile}>Open</button>
+        <span>{segnames.start}-{segnames.end}</span>
+		<button className="btn btn-success"  onClick={this.openfile}>Open</button>
         </span>
         </td>
         </tr>);
