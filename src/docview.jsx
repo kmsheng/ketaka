@@ -35,7 +35,7 @@ var Docview = React.createClass({
      else this.offsets=nextProps.template.tokenize(nextProps.page.inscription).offsets; 
   },
   componentDidUpdate:function() {
-    if (this.state.newMarkupAt) {
+    if (this.state.newMarkupAt > -1) {
       this.refs.surface.openinlinedialog(this.state.newMarkupAt);
     }
   },

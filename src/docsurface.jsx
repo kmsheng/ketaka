@@ -34,7 +34,7 @@ var Surface = React.createClass({
   showinlinedialog:function(start) {
     if (!this.refs.inlinedialog) return;
     if (!start && this.state.markup) start=this.state.markup.start;
-    if (!start) return;
+    if (start < 0) return;
 
     var domnode=this.getDOMNode().querySelector('span[data-n="'+start+'"]');
     if (!domnode) return;
