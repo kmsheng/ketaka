@@ -27,6 +27,10 @@ var contextmenu_tibetan = React.createClass({
     var filename = e.target.attributes["data-reactid"].value.substring(start,10+start);
     this.props.action("clearmarkup",filename);
   },
+  onShowswitch:function() {
+    if(this.props.len>1) return <a role="menuitem" tabIndex="-1" href="#">Suggest</a>
+	else return <a role="menuitem" tabIndex="-1" href="#" onClick={this.addSuggestion}>Suggest</a>
+  },
   render: function() {
     var disabled=(this.props.len>1)?"disabled":"";
     return ( 
@@ -36,7 +40,7 @@ var contextmenu_tibetan = React.createClass({
         <span className="caret"></span>
       </button>
       <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        <li className={disabled}><a role="menuitem" tabIndex="-1" href="#" onClick={this.addSuggestion}>Suggest</a></li>
+        <li className={disabled}>{this.onShowswitch()}</li>
         <li><a role="menuitem" tabIndex="-1" href="#" onClick={this.markup} data-markup="comment">Comment</a></li>
         <li><a role="menuitem" tabIndex="-1" href="#" onClick={this.deleteText}>Delete</a></li>
         <li><a role="menuitem" tabIndex="-1" href="#" onClick={this.clearMarkup}>Clear Markup</a></li>
