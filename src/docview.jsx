@@ -188,7 +188,6 @@ var Docview = React.createClass({
     if (!M.length) return sel;
     if (direction>0) {
       for (var i=0;i<M.length;i++) {
-
         if (this.props.user.admin ==true && M[i].start>=s && M[i].payload.author != this.props.user.name) {
           sel.start=M[i].start;sel.len=M[i].len;
           break;

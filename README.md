@@ -20,12 +20,16 @@
     $ cd ketaka
     $ 將KDB放置路徑中
 
-4.執行ketaka
+4.安裝pouchdb
+     
+	pouchdb安裝步驟見下方安裝pouchdb流程
+	
+5.執行ketaka
 
     $ ks server
 
 
-5.修改程式
+6.修改程式
 
     $ 原始碼都在src資料夾中
 

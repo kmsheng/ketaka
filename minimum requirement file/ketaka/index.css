@@ -90,11 +90,13 @@ span.inlinedialog div {
  display: table-row;
 }
 
-.dummy {
-}
+
 .marginTop {
   margin-top: 75px;
 }
+
+/*統一定義控件寬度*/
+
 .control_size {
   width:262px;
 }
@@ -107,11 +109,17 @@ span.inlinedialog div {
 .control_S-halfsize {
   width:111px;
 }
+
+/*定義首頁圖片*/
+
 .logostyle {
   height:300px;
   display:block;
   margin-left:20px;
 }
+
+/*定義userlist的照片大小*/
+
 .photostyle {
   width:100px;
   height:100px;
@@ -121,6 +129,8 @@ span.inlinedialog div {
   background-color:#dddddd;
   object-fit:cover;
 }
+
+/*客製化單圖控件*/
 .updatebutton {
   padding-top:35px;
   padding-bottom:35px;
@@ -443,11 +453,17 @@ textarea {
 .row {
     width:99.99%;
 }
+
+
+
 .tokenlist {
 	overflow-y:auto;
 	height:310px;
 	width:250px;
 }
+
+/*定義search resultlist 字型大小*/
+
 .resultlist {overflow-y:auto;height:330px;}
 .result {font-size:180%;}
 hl {background-color:khaki}
@@ -459,7 +475,17 @@ hl[n="2"] {background-color:lightgreen}
 .tofind {
 	font-size:200%;
 }
+
+/*定義內文大小與間距*/
 .main-wrapper {
     font-size: 1em;
     line-height: 2.5em;
+}
+
+.input-lg {
+  height: 65px;
+  padding: 5px 5px;
+  font-size: 22px;
+  line-height: 1.3333333;
+  border-radius: 6px;
 }
