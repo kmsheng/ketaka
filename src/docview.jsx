@@ -242,7 +242,8 @@ var Docview = React.createClass({
     Array.prototype.push.apply( args, arguments );
     var action=args.shift();
     if (action=="strikeout") {
-      if (sl>maxlen) return;
+      if (sl>maxlen || sl == 0) return;
+
       this.props.page.strikeout(ss,sl,username);
       this.setState({selstart:newstart+1,sellength:0});
     } else if (action=="addsuggestion") {
