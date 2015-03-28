@@ -213,18 +213,18 @@ var Docview = React.createClass({
   },
   goPrevMistake:function() {
     var sel=this.findMistake(-1);
-    if (sel.start) {
+    if (sel.start > -1 && sel.len != 0) {
       this.setState({selstart:sel.start,sellength:sel.len,newMarkupAt:sel.start});
     }
-    return sel.start;
+    return sel;
   },
   goNextMistake:function() {
     var sel=this.findMistake(1);
-    if (sel.start) {
+    if (sel.start > -1 && sel.len != 0) {
       this.setState({selstart:sel.start,sellength:sel.len,newMarkupAt:sel.start});
     //return sel.start;
     }
-  return sel.start;
+  return sel;
   },
   goNextPageMistake:function(start,len) {
   this.setState({selstart:start,sellength:len,newMarkupAt:start});

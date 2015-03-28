@@ -195,7 +195,7 @@ var Docview_tibetan = React.createClass({
       else type =  this.refs.docview.goPrevMistake();
       if(this.props.user.admin == true && document.getElementById("applychange")) document.getElementById("applychange").getElementsByTagName("input")[1].focus();
       //else if(this.props.user.admin ==false && document.getElementById("suggest_tibetan"))document.getElementById("suggest_tibetan").getElementsByTagName("input")[1].focus();
-      if(type==0 && !(arr[0][0] >= pageid && args[0] == "previous") && type==0 && !(arr[0][arr[0].length-1] <= pageid && args[0] == "next"))
+      if(type.start==0 && type.len == 0 && !(arr[0][0] == pageid && args[0] == "previous") && type.start==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
       {
         save =true;
         var nextstate,value = this.find_otherpage(args[0],this.state.pageid,arr,this.state.doc);
