@@ -68,7 +68,7 @@ var Docview_tibetan = React.createClass({
       else if(markups.length != 0){
       for(var i=0;i<markups.length;i++)
       {
-        markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+markups[i].start;
+        markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+this.state.pageid+"_"+markups[i].start;
         markups[i].pageid=this.state.pageid;
         markups[i]._rev = markups[i].payload._rev;
       }
@@ -249,7 +249,7 @@ var Docview_tibetan = React.createClass({
       //var dbname=this.props.filename.replace(".xml","");
       //dbname=this.props.project.name+dbname.substring(4,dbname.length);
       var db = new PouchDB('http://'+ip+':5984/'+dbname);
-      var id = dbname+"_"+name+"_"+start;
+      var id = dbname+"_"+name+"_"+this.state.pageid+"_"+start;
       pouch.removetopouch(db,id);
   },
   getMarkups:function()

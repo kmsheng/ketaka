@@ -261,7 +261,7 @@ var clearMarkups=function(start,len,author,filename) {
 	var db =  new PouchDB('http://'+ip+':5984/'+filename);
 	for(var i=0;i<this.__markups__().length;i++){
 		if(this.__markups__()[i].start >= start && this.__markups__()[i].start <= start+len){
-			var docid = filename+"_"+author+"_"+this.__markups__()[i].start;
+			var docid = filename+"_"+author+"_"+this.id+"_"+this.__markups__()[i].start;
 			pouch.removetopouch(db,docid);
 		}
 	}
