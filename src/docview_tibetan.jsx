@@ -195,7 +195,7 @@ var Docview_tibetan = React.createClass({
       else type =  this.refs.docview.goPrevMistake();
       if(this.props.user.admin == true && document.getElementById("applychange")) document.getElementById("applychange").getElementsByTagName("input")[1].focus();
       //else if(this.props.user.admin ==false && document.getElementById("suggest_tibetan"))document.getElementById("suggest_tibetan").getElementsByTagName("input")[1].focus();
-      if(type==0 && !(arr[0][0] == pageid && args[0] == "previous") && type==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
+      if(type==0 && !(arr[0][0] >= pageid && args[0] == "previous") && type==0 && !(arr[0][arr[0].length-1] <= pageid && args[0] == "next"))
       {
         save =true;
         var nextstate,value = this.find_otherpage(args[0],this.state.pageid,arr,this.state.doc);
@@ -326,6 +326,7 @@ var Docview_tibetan = React.createClass({
       var revarr = [],temp = "",newpage;
       if(direction == "previous" && arr[0].indexOf(pid)-1 == -2) newpage = arr[0].length -1;
       else if(direction == "previous" && arr[0].indexOf(pid)-1 != -2) newpage =arr[0].indexOf(pid)-1;
+	  else if(direction == "next" && !data.getPage(pid).__markups__()) newpage = arr[0].indexOf(pid)+2;
       else newpage = arr[0].indexOf(pid)+1;
       var markups = data.getPage(arr[0][newpage]).__markups__();
       for(var i=0;i<markups.length;i++)
