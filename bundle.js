@@ -4245,9 +4245,13 @@ var nav_tibetan = React.createClass({displayName: "nav_tibetan",
     this.props.action("gopage",pagename);
     this.pageidtimer=null;
   },
+  EntersetPageId:function(e) {
+	if (e.charCode==13) this.setPageId();
+  
+  },
   pageIdChange:function() {
     clearTimeout(this.pageidtimer);
-    this.pageidtimer=setTimeout(this.setPageId.bind(this) ,500);
+    this.pageidtimer=setTimeout(this.setPageId.bind(this) ,5000);
   },
   nextPage:function() {
     this.props.action("next");
@@ -4372,7 +4376,7 @@ render: function() {
               React.createElement("img", {src: "images/first.png", onClick: this.firstPage}), 
               React.createElement("img", {src: "images/left.png", onClick: this.prevPage})
              ), 
-            React.createElement("input", {id: "pageid", ref: "pageid", defaultValue: this.pageName(), onChange: this.pageIdChange, className: "form-control"}), 
+            React.createElement("input", {id: "pageid", ref: "pageid", defaultValue: this.pageName(), onChange: this.pageIdChange, onKeyPress: this.EntersetPageId, className: "form-control"}), 
             React.createElement("span", {className: "input-group-btn"}, 
               React.createElement("img", {src: "images/right.png", onClick: this.nextPage}), 
               React.createElement("img", {src: "images/last.png", onClick: this.lastPage})
