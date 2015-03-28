@@ -49,12 +49,13 @@ var combine=function(markups) {
 	var out=[],i=1,at=0;
 
 	while (i<markups.length) {
-		if (combinable(markups[at].payload,markups[i].payload)) {
+		/*if (combinable(markups[at].payload,markups[i].payload)) {
 			markups[at].l++;
-		} else {
+		} else {*/
+			markups[at].l++;
 			out.push(markups[at]);
 			at=i;
-		}
+		//}
 		i++;
 	}
 	out.push(markups[at]);
