@@ -95,6 +95,7 @@ getInitialState: function() {
         <button ref="encrypted" id="btnlogin" className="btn btn-lg btn-success btn-block control_size"  onClick={this.login} >Log in</button>
         <div className="create_acc"><a onClick={this.singup}><h4>Create account</h4></a></div>
         </div> 
+		<div className="col-md-5 col-md-offset-3"><h6>version. 0.0.01</h6></div>
        </div>
        </div>
     );
