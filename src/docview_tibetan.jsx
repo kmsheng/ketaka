@@ -46,7 +46,7 @@ var Docview_tibetan = React.createClass({
     var filename=this.state.doc.meta.filename; 
     var username=this.props.user.name;
     var markups=this.page().filterMarkup(function(m){return m.payload.author==username});
-    markups = this.change_suggests(markups);
+    if(this.props.user.admin == true)  markups = this.change_suggests(markups);
     var dbid=this.props.kde.dbname;
     this.saveMarkuptoPouchdb(filename,markups);
     /*
@@ -89,6 +89,7 @@ var Docview_tibetan = React.createClass({
   },
   change_suggests:function(markups,type) {
     var length = markups.length;
+	var final_markups = [];
     if(length > 0 && this.props.user.admin == true)
     {
       for(var i=0;i<length;i++)
@@ -102,18 +103,20 @@ var Docview_tibetan = React.createClass({
           }
           else if(type == null && suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name) {
             suggest_markups[j].payload.state = "reject";
-            markups[markups.length] = suggest_markups[j];
+            //markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           } 
           else if(type != null && suggest_markups[j].payload.type == "suggest")
           {
             suggest_markups[j].payload.state = "";
-            markups[markups.length] = suggest_markups[j];
+            //markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           }
-          
         }
       }
+	  if(final_markups == "") final_markups = markups;
     }
-    return markups;
+    return final_markups;
   },
   getActiveHits:function() { // get hits in this page and send to docsurface 
     if (!this.props.kde.activeQuery) return [];
@@ -191,20 +194,23 @@ var Docview_tibetan = React.createClass({
     var arr = this.watch_suggest();
     //if(this.props.user.admin == true)
     //{
-      if(args[0] == "next")  type =  this.refs.docview.goNextMistake();
-      else type =  this.refs.docview.goPrevMistake();
+	  var type ={start:0,len:0};
+      if(args[0] == "next" && arr[0].indexOf(this.state.pageid) != -1)  type =  this.refs.docview.goNextMistake();
+      else if(args[0] == "previous" && arr[0].indexOf(this.state.pageid) != -1) type =  this.refs.docview.goPrevMistake();
       if(this.props.user.admin == true && document.getElementById("applychange")) document.getElementById("applychange").getElementsByTagName("input")[1].focus();
       //else if(this.props.user.admin ==false && document.getElementById("suggest_tibetan"))document.getElementById("suggest_tibetan").getElementsByTagName("input")[1].focus();
-      if(type.start==0 && type.len == 0 && !(arr[0][0] == pageid && args[0] == "previous") && type.start==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
+      if(arr[0].length) {
+	  if(type.start==0 && type.len == 0 && !(arr[0][0] == pageid && args[0] == "previous") && type.start==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
       {
-        save =true;
         var nextstate,value = this.find_otherpage(args[0],this.state.pageid,arr,this.state.doc);
         if(value)
         {
+		  save =true;
           nextstate = value[1];
           this.setState({pageid:value[0],selstart:nextstate.start,sellength:nextstate.len,newMarkupAt:nextstate.start});
           var type =  this.refs.docview.goNextPageMistake(nextstate.start,nextstate.len);
         } 
+	   }
       }
     //}
     //else return;
