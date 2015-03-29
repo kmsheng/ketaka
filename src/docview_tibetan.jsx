@@ -199,7 +199,7 @@ var Docview_tibetan = React.createClass({
       {
         save =true;
         var nextstate,value = this.find_otherpage(args[0],this.state.pageid,arr,this.state.doc);
-        if(value[1] != "")
+        if(value)
         {
           nextstate = value[1];
           this.setState({pageid:value[0],selstart:nextstate.start,sellength:nextstate.len,newMarkupAt:nextstate.start});
@@ -323,11 +323,11 @@ var Docview_tibetan = React.createClass({
   },
   find_otherpage:function(direction,pid,arr,data)
   {
+	  if(arr[0] == "") return null;
       var revarr = [],temp = "",newpage;
-      if(direction == "previous" && arr[0].indexOf(pid)-1 == -2) newpage = arr[0].length -1;
-      else if(direction == "previous" && arr[0].indexOf(pid)-1 != -2) newpage =arr[0].indexOf(pid)-1;
-	  else if(direction == "next" && !data.getPage(pid).__markups__()) newpage = arr[0].indexOf(pid)+2;
-      else newpage = arr[0].indexOf(pid)+1;
+	  if(direction == "previous") for(var i=arr[0].length;i>0;i--) {if(arr[0][i-1] < pid) {newpage = i-1;break;}}
+	  else if(direction == "next") for(var i=0;i<arr[0].length;i++) {if(arr[0][i] > pid) {newpage = i;break;}}
+	  if(newpage == null) return null; 
       var markups = data.getPage(arr[0][newpage]).__markups__();
       for(var i=0;i<markups.length;i++)
       {
