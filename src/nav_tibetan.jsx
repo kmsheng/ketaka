@@ -143,7 +143,7 @@ render: function() {
               <img src="images/first.png" onClick={this.firstPage}></img>
               <img src="images/left.png" onClick={this.prevPage}></img>
              </span>
-            <input id="pageid" ref="pageid" defaultValue={this.pageName()} onChange={this.pageIdChange} onKeyPress={this.EntersetPageId} className="form-control"></input>
+            <input id="pageid" ref="pageid" defaultValue={this.pageName()} onKeyPress={this.EntersetPageId} className="form-control"></input>
             <span className="input-group-btn">
               <img src="images/right.png" onClick={this.nextPage}></img>
               <img src="images/last.png" onClick={this.lastPage}></img>
