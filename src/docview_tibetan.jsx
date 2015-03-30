@@ -46,7 +46,7 @@ var Docview_tibetan = React.createClass({
     var filename=this.state.doc.meta.filename; 
     var username=this.props.user.name;
     var markups=this.page().filterMarkup(function(m){return m.payload.author==username});
-    if(this.props.user.admin == true)  markups = this.change_suggests(markups);
+    if(this.props.user.admin == true)  markups = this.change_suggests(markups,0);
     var dbid=this.props.kde.dbname;
     this.saveMarkuptoPouchdb(filename,markups);
     /*
@@ -90,6 +90,7 @@ var Docview_tibetan = React.createClass({
   change_suggests:function(markups,type) {
     var length = markups.length;
 	var final_markups = [];
+	if (type == 0) final_markups = markups; 
     if(length > 0 && this.props.user.admin == true)
     {
       for(var i=0;i<length;i++)
@@ -97,19 +98,21 @@ var Docview_tibetan = React.createClass({
         var suggest_markups=this.page().filterMarkup(function(m){return m.start==markups[i].start});
         for(var j=0;j<suggest_markups.length;j++)
         {
-          if(type == null && suggest_markups[j].payload.author == markups[i].payload.contributor) {
+		  if(suggest_markups[j].payload.state != "" && type == 1) {
+		     suggest_markups[j].payload.state = "";
+			 final_markups[final_markups.length]= suggest_markups[j];
+		  }
+          else if(suggest_markups[j].payload.author == markups[i].payload.contributor) {
             suggest_markups[j].payload.state = "approve";
-            markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           }
-          else if(type == null && suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name) {
+          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name) {
             suggest_markups[j].payload.state = "reject";
-            //markups[markups.length] = suggest_markups[j];
 			final_markups[final_markups.length]= suggest_markups[j];
           } 
-          else if(type != null && suggest_markups[j].payload.type == "suggest")
+          else if(suggest_markups[j].payload.type == "suggest")
           {
             suggest_markups[j].payload.state = "";
-            //markups[markups.length] = suggest_markups[j];
 			final_markups[final_markups.length]= suggest_markups[j];
           }
         }
