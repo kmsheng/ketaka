@@ -49,6 +49,7 @@ var Docview_tibetan = React.createClass({
     if(this.props.user.admin == true)  markups = this.change_suggests(markups,0);
     var dbid=this.props.kde.dbname;
     this.saveMarkuptoPouchdb(filename,markups);
+	
     /*
     this.$ksana("saveMarkup",{dbid:dbid,markups:markups,filename:filename,i:this.state.pageid } ,function(data){
       doc.markClean();
@@ -98,19 +99,19 @@ var Docview_tibetan = React.createClass({
         var suggest_markups=this.page().filterMarkup(function(m){return m.start==markups[i].start});
         for(var j=0;j<suggest_markups.length;j++)
         {
-		  if(suggest_markups[j].payload.state != "" && type == 1) {
+		  if(suggest_markups[j].payload.state != "" && type == 1 && suggest_markups[j].payload.type != "revision") {
 		     suggest_markups[j].payload.state = "";
 			 final_markups[final_markups.length]= suggest_markups[j];
 		  }
-          else if(suggest_markups[j].payload.author == markups[i].payload.contributor) {
+          else if(suggest_markups[j].payload.author == markups[i].payload.contributor && suggest_markups[j].payload.type != "revision") {
             suggest_markups[j].payload.state = "approve";
 			final_markups[final_markups.length]= suggest_markups[j];
           }
-          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name) {
+          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name && suggest_markups[j].payload.type != "revision") {
             suggest_markups[j].payload.state = "reject";
 			final_markups[final_markups.length]= suggest_markups[j];
           } 
-          else if(suggest_markups[j].payload.type == "suggest")
+          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.type != "revision")
           {
             suggest_markups[j].payload.state = "";
 			final_markups[final_markups.length]= suggest_markups[j];
@@ -244,7 +245,7 @@ var Docview_tibetan = React.createClass({
       {
         this.saveMarkup();
         this.getMarkups();
-      }
+      } 
   }, 
   loadDocument:function(fromserver) {
     return D.createDocument(fromserver.kd,fromserver.kdm);

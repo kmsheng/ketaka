@@ -36,7 +36,7 @@ var inlinedialog_comment_tibetan = React.createClass({
         <span className="col-sm-12">{this.props.text}</span>
         <span className="col-sm-3"><h5>Comment</h5></span>
         <span className="col-sm-9">
-        <span className="col-sm-12" style={{marginBottom:"5px"}}><textarea rows="3" ref="comment" className="form-control input-lg"></textarea></span>
+        <span className="col-sm-12" style={{marginBottom:"5px"}}><textarea rows="3" ref="comment" className="form-control input-lg" ></textarea></span>
         <span className="col-sm-6"><button className="form-control btn btn-warning control_S-halfsize" onClick={this.remove}>Cancel</button></span>
         <span className="col-sm-6"><button className="form-control btn btn-success control_S-halfsize" onClick={this.apply}>Apply</button></span>
         </span>
@@ -47,7 +47,11 @@ var inlinedialog_comment_tibetan = React.createClass({
     if (this.refs.comment) this.refs.comment.getDOMNode().focus();
   },
   componentDidMount:function() {
+    if (this.markup().hint && this.markup().hint != "undefined") this.refs.comment.getDOMNode().value = this.markup().hint;
     setTimeout(this.focus,300);
+  },
+  componentDidUpdate:function() {
+    if (this.markup().hint && this.markup().hint != "undefined") this.refs.comment.getDOMNode().value = this.markup().hint;
   },
 });
 module.exports=inlinedialog_comment_tibetan;
