@@ -85,6 +85,9 @@ var addTokenOffset=function(markups,offsets) {
 		var m=markups[i],at,at2;
 		at=offsets.indexOf(m.start); //need optimized
 		if (m.len) at2=offsets.indexOf(m.start+m.len);
+		if(at == offsets.length-1) {
+			at2 = m.len;
+		}
 		if (at==-1 || at2==-1) {
 			console.trace("markup position not at token boundary");
 			break;
@@ -100,7 +103,8 @@ var applyTokenOffset=function(markups,offsets) {
 	for (var i=0;i<markups.length;i++) {
 		var m=markups[i];
 		m.start=offsets[m.s];
-		m.len=offsets[m.s+m.l] - offsets[m.s];
+		if(m.s == offsets.length-1) m.len = m.l;
+		else m.len=offsets[m.s+m.l] - offsets[m.s];
 		delete m.s;
 		delete m.l;
 	}
