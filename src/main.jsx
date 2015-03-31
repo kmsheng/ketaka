@@ -330,10 +330,11 @@ var main = React.createClass({
         var type = args[0];
         if(type == 0) {
            $(".alert_ok").removeClass("in").show();
-           $(".alert_ok").delay(200).addClass("in").fadeOut(3000);}
+           //$(".alert_ok").delay(200).addClass("in").fadeOut(3000);
+         }
         else {
            $(".alert_err").removeClass("in").show();
-           $(".alert_err").delay(200).addClass("in").fadeOut(3000);
+           //$(".alert_err").delay(200).addClass("in").fadeOut(3000);
         }
     } else if (type=="myinput") {
         var status = args[0];

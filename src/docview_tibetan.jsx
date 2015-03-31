@@ -397,11 +397,15 @@ var Docview_tibetan = React.createClass({
     var imageheight = 307*(document.body.offsetWidth/1280)+30;
     return imageheight;
   },
+  closeAlert:function(e) {
+      if(e.target.id == "ok") $(".alert_ok").delay(200).addClass("in").fadeOut(200);
+      else $(".alert_err").delay(200).addClass("in").fadeOut(200);
+  },
   getAlert:function() {
-    return  (<div><div className="alert_ok alert-success" style={{width:window.innerWidth*0.95}}>
-            <strong>Saved successfully!</strong>
+    return  ( <div><div className="alert_ok alert-success" style={{width:window.innerWidth*0.95}}>
+            <a href="#" id="ok" className="close" onClick={this.closeAlert}>&times;</a><strong>Saved successfully!</strong>
             </div><div className="alert_err alert-danger" style={{width:window.innerWidth*0.95}}>
-            <strong>Saved failed!</strong>
+            <a href="#" id="error" className="close" onClick={this.closeAlert}>&times;</a><strong>Saved failed!</strong>
             </div></div>);
   },
   render: function() {
