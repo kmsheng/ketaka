@@ -1364,7 +1364,7 @@ var clearMarkups=function(start,len,author,filename) {
 	var db =  new PouchDB('http://'+ip+':5984/'+filename);
 	for(var i=0;i<this.__markups__().length;i++){
 		if(this.__markups__()[i].start >= start && this.__markups__()[i].start <= start+len){
-			var docid = filename+"_"+author+"_"+this.__markups__()[i].start;
+			var docid = filename+"_"+author+"_"+this.id+"_"+this.__markups__()[i].start;
 			pouch.removetopouch(db,docid);
 		}
 	}
@@ -2207,18 +2207,18 @@ var Docview = React.createClass({displayName: "Docview",
   },
   goPrevMistake:function() {
     var sel=this.findMistake(-1);
-    if (sel.start) {
+    if (sel.start > -1 && sel.len != 0) {
       this.setState({selstart:sel.start,sellength:sel.len,newMarkupAt:sel.start});
     }
-    return sel.start;
+    return sel;
   },
   goNextMistake:function() {
     var sel=this.findMistake(1);
-    if (sel.start) {
+    if (sel.start > -1 && sel.len != 0) {
       this.setState({selstart:sel.start,sellength:sel.len,newMarkupAt:sel.start});
     //return sel.start;
     }
-  return sel.start;
+  return sel;
   },
   goNextPageMistake:function(start,len) {
   this.setState({selstart:start,sellength:len,newMarkupAt:start});
@@ -2433,9 +2433,10 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
     var filename=this.state.doc.meta.filename; 
     var username=this.props.user.name;
     var markups=this.page().filterMarkup(function(m){return m.payload.author==username});
-    markups = this.change_suggests(markups);
+    if(this.props.user.admin == true)  markups = this.change_suggests(markups,0);
     var dbid=this.props.kde.dbname;
     this.saveMarkuptoPouchdb(filename,markups);
+	
     /*
     this.$ksana("saveMarkup",{dbid:dbid,markups:markups,filename:filename,i:this.state.pageid } ,function(data){
       doc.markClean();
@@ -2455,7 +2456,7 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
       else if(markups.length != 0){
       for(var i=0;i<markups.length;i++)
       {
-        markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+markups[i].start;
+        markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+this.state.pageid+"_"+markups[i].start;
         markups[i].pageid=this.state.pageid;
         markups[i]._rev = markups[i].payload._rev;
       }
@@ -2476,6 +2477,8 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
   },
   change_suggests:function(markups,type) {
     var length = markups.length;
+	var final_markups = [];
+	if (type == 0) final_markups = markups; 
     if(length > 0 && this.props.user.admin == true)
     {
       for(var i=0;i<length;i++)
@@ -2483,24 +2486,28 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
         var suggest_markups=this.page().filterMarkup(function(m){return m.start==markups[i].start});
         for(var j=0;j<suggest_markups.length;j++)
         {
-          if(type == null && suggest_markups[j].payload.author == markups[i].payload.contributor) {
+		  if(suggest_markups[j].payload.state != "" && type == 1 && suggest_markups[j].payload.type != "revision") {
+		     suggest_markups[j].payload.state = "";
+			 final_markups[final_markups.length]= suggest_markups[j];
+		  }
+          else if(suggest_markups[j].payload.author == markups[i].payload.contributor && suggest_markups[j].payload.type != "revision") {
             suggest_markups[j].payload.state = "approve";
-            markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           }
-          else if(type == null && suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name) {
+          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.author != this.props.user.name && suggest_markups[j].payload.type != "revision") {
             suggest_markups[j].payload.state = "reject";
-            markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           } 
-          else if(type != null && suggest_markups[j].payload.type == "suggest")
+          else if(suggest_markups[j].payload.type == "suggest" && suggest_markups[j].payload.type != "revision")
           {
             suggest_markups[j].payload.state = "";
-            markups[markups.length] = suggest_markups[j];
+			final_markups[final_markups.length]= suggest_markups[j];
           }
-          
         }
       }
+	  if(final_markups == "") final_markups = markups;
     }
-    return markups;
+    return final_markups;
   },
   getActiveHits:function() { // get hits in this page and send to docsurface 
     if (!this.props.kde.activeQuery) return [];
@@ -2578,20 +2585,23 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
     var arr = this.watch_suggest();
     //if(this.props.user.admin == true)
     //{
-      if(args[0] == "next")  type =  this.refs.docview.goNextMistake();
-      else type =  this.refs.docview.goPrevMistake();
+	  var type ={start:0,len:0};
+      if(args[0] == "next" && arr[0].indexOf(this.state.pageid) != -1)  type =  this.refs.docview.goNextMistake();
+      else if(args[0] == "previous" && arr[0].indexOf(this.state.pageid) != -1) type =  this.refs.docview.goPrevMistake();
       if(this.props.user.admin == true && document.getElementById("applychange")) document.getElementById("applychange").getElementsByTagName("input")[1].focus();
       //else if(this.props.user.admin ==false && document.getElementById("suggest_tibetan"))document.getElementById("suggest_tibetan").getElementsByTagName("input")[1].focus();
-      if(type==0 && !(arr[0][0] == pageid && args[0] == "previous") && type==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
+      if(arr[0].length) {
+	  if(type.start==0 && type.len == 0 && !(arr[0][0] == pageid && args[0] == "previous") && type.start==0 && !(arr[0][arr[0].length-1] == pageid && args[0] == "next"))
       {
-        save =true;
         var nextstate,value = this.find_otherpage(args[0],this.state.pageid,arr,this.state.doc);
-        if(value[1] != "")
+        if(value)
         {
+		  save =true;
           nextstate = value[1];
           this.setState({pageid:value[0],selstart:nextstate.start,sellength:nextstate.len,newMarkupAt:nextstate.start});
           var type =  this.refs.docview.goNextPageMistake(nextstate.start,nextstate.len);
         } 
+	   }
       }
     //}
     //else return;
@@ -2622,7 +2632,7 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
       {
         this.saveMarkup();
         this.getMarkups();
-      }
+      } 
   }, 
   loadDocument:function(fromserver) {
     return D.createDocument(fromserver.kd,fromserver.kdm);
@@ -2636,7 +2646,7 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
       //var dbname=this.props.filename.replace(".xml","");
       //dbname=this.props.project.name+dbname.substring(4,dbname.length);
       var db = new PouchDB('http://'+ip+':5984/'+dbname);
-      var id = dbname+"_"+name+"_"+start;
+      var id = dbname+"_"+name+"_"+this.state.pageid+"_"+start;
       pouch.removetopouch(db,id);
   },
   getMarkups:function()
@@ -2710,10 +2720,11 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
   },
   find_otherpage:function(direction,pid,arr,data)
   {
+	  if(arr[0] == "") return null;
       var revarr = [],temp = "",newpage;
-      if(direction == "previous" && arr[0].indexOf(pid)-1 == -2) newpage = arr[0].length -1;
-      else if(direction == "previous" && arr[0].indexOf(pid)-1 != -2) newpage =arr[0].indexOf(pid)-1;
-      else newpage = arr[0].indexOf(pid)+1;
+	  if(direction == "previous") for(var i=arr[0].length;i>0;i--) {if(arr[0][i-1] < pid) {newpage = i-1;break;}}
+	  else if(direction == "next") for(var i=0;i<arr[0].length;i++) {if(arr[0][i] > pid) {newpage = i;break;}}
+	  if(newpage == null) return null; 
       var markups = data.getPage(arr[0][newpage]).__markups__();
       for(var i=0;i<markups.length;i++)
       {
@@ -2773,11 +2784,14 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
     var imageheight = 307*(document.body.offsetWidth/1280)+30;
     return imageheight;
   },
+  closeAlert:function(e) {
+      $(".alert_err").delay(200).addClass("in").fadeOut(200);
+  },
   getAlert:function() {
-    return  (React.createElement("div", null, React.createElement("div", {className: "alert_ok alert-success", style: {width:window.innerWidth*0.95}}, 
+    return  ( React.createElement("div", null, React.createElement("div", {className: "alert_ok alert-success", style: {width:window.innerWidth*0.95}}, 
             React.createElement("strong", null, "Saved successfully!")
             ), React.createElement("div", {className: "alert_err alert-danger", style: {width:window.innerWidth*0.95}}, 
-            React.createElement("strong", null, "Saved failed!")
+            React.createElement("a", {href: "#", id: "error", className: "close", onClick: this.closeAlert}, "×"), React.createElement("strong", null, "Saved failed!")
             )));
   },
   render: function() {
@@ -3247,7 +3261,11 @@ var inlinedialog_comment_tibetan = React.createClass({displayName: "inlinedialog
     if (this.refs.comment) this.refs.comment.getDOMNode().focus();
   },
   componentDidMount:function() {
+    if (this.markup().hint && this.markup().hint != "undefined") this.refs.comment.getDOMNode().value = this.markup().hint;
     setTimeout(this.focus,300);
+  },
+  componentDidUpdate:function() {
+    if (this.markup().hint && this.markup().hint != "undefined") this.refs.comment.getDOMNode().value = this.markup().hint;
   },
 });
 module.exports=inlinedialog_comment_tibetan;
@@ -3754,10 +3772,11 @@ var main = React.createClass({displayName: "main",
         var type = args[0];
         if(type == 0) {
            $(".alert_ok").removeClass("in").show();
-           $(".alert_ok").delay(200).addClass("in").fadeOut(3000);}
+           $(".alert_ok").delay(200).addClass("in").fadeOut(3000);
+         }
         else {
            $(".alert_err").removeClass("in").show();
-           $(".alert_err").delay(200).addClass("in").fadeOut(3000);
+           //$(".alert_err").delay(200).addClass("in").fadeOut(3000);
         }
     } else if (type=="myinput") {
         var status = args[0];
@@ -4151,12 +4170,13 @@ var combine=function(markups) {
 	var out=[],i=1,at=0;
 
 	while (i<markups.length) {
-		if (combinable(markups[at].payload,markups[i].payload)) {
+		/*if (combinable(markups[at].payload,markups[i].payload)) {
 			markups[at].l++;
-		} else {
+		} else {*/
+			markups[at].l++;
 			out.push(markups[at]);
 			at=i;
-		}
+		//}
 		i++;
 	}
 	out.push(markups[at]);
@@ -4186,6 +4206,9 @@ var addTokenOffset=function(markups,offsets) {
 		var m=markups[i],at,at2;
 		at=offsets.indexOf(m.start); //need optimized
 		if (m.len) at2=offsets.indexOf(m.start+m.len);
+		if(at == offsets.length-1) {
+			at2 = m.len;
+		}
 		if (at==-1 || at2==-1) {
 			console.trace("markup position not at token boundary");
 			break;
@@ -4201,7 +4224,8 @@ var applyTokenOffset=function(markups,offsets) {
 	for (var i=0;i<markups.length;i++) {
 		var m=markups[i];
 		m.start=offsets[m.s];
-		m.len=offsets[m.s+m.l] - offsets[m.s];
+		if(m.s == offsets.length-1) m.len = m.l;
+		else m.len=offsets[m.s+m.l] - offsets[m.s];
 		delete m.s;
 		delete m.l;
 	}
@@ -4245,9 +4269,13 @@ var nav_tibetan = React.createClass({displayName: "nav_tibetan",
     this.props.action("gopage",pagename);
     this.pageidtimer=null;
   },
+  EntersetPageId:function(e) {
+	if (e.charCode==13) this.setPageId();
+  
+  },
   pageIdChange:function() {
     clearTimeout(this.pageidtimer);
-    this.pageidtimer=setTimeout(this.setPageId.bind(this) ,500);
+    this.pageidtimer=setTimeout(this.setPageId.bind(this) ,5000);
   },
   nextPage:function() {
     this.props.action("next");
@@ -4372,7 +4400,7 @@ render: function() {
               React.createElement("img", {src: "images/first.png", onClick: this.firstPage}), 
               React.createElement("img", {src: "images/left.png", onClick: this.prevPage})
              ), 
-            React.createElement("input", {id: "pageid", ref: "pageid", defaultValue: this.pageName(), onChange: this.pageIdChange, className: "form-control"}), 
+            React.createElement("input", {id: "pageid", ref: "pageid", defaultValue: this.pageName(), onKeyPress: this.EntersetPageId, className: "form-control"}), 
             React.createElement("span", {className: "input-group-btn"}, 
               React.createElement("img", {src: "images/right.png", onClick: this.nextPage}), 
               React.createElement("img", {src: "images/last.png", onClick: this.lastPage})
@@ -5888,7 +5916,8 @@ getInitialState: function() {
         React.createElement("h2", {className: "label label-danger"}, this.props.getpasswordError()), React.createElement("br", null), 
         React.createElement("button", {ref: "encrypted", id: "btnlogin", className: "btn btn-lg btn-success btn-block control_size", onClick: this.login}, "Log in"), 
         React.createElement("div", {className: "create_acc"}, React.createElement("a", {onClick: this.singup}, React.createElement("h4", null, "Create account")))
-        )
+        ), 
+		React.createElement("div", {className: "col-md-5 col-md-offset-3"}, React.createElement("h6", null, "version. 0.0.04"))
        )
        )
     );
@@ -6782,8 +6811,8 @@ module.exports={open:openLocal,setPath:setPath, close:closeLocal, enumKdb:enumKd
 },{"./bsearch":"d:\\ksana2015\\node_modules\\ksana-database\\bsearch.js","./exportas":"d:\\ksana2015\\node_modules\\ksana-database\\exportas.js","./listkdb":"d:\\ksana2015\\node_modules\\ksana-database\\listkdb.js","./platform":"d:\\ksana2015\\node_modules\\ksana-database\\platform.js","fs":false,"ksana-jsonrom":"d:\\ksana2015\\node_modules\\ksana-jsonrom\\index.js"}],"d:\\ksana2015\\node_modules\\ksana-database\\listkdb.js":[function(require,module,exports){
 /* return array of dbid and absolute path*/
 var listkdb_html5=function(cb,context) {
-	require("ksana2015-webruntime").html5fs.readdir(function(kdbs){
-			cb.apply(this,[kdbs]);
+	ksana.runtime.html5fs.readdir(function(kdbs){
+		cb.call(this,kdbs);
 	},context||this);		
 }
 
@@ -6841,7 +6870,7 @@ var listkdb=function(cb,context) {
 	return files;
 }
 module.exports=listkdb;
-},{"./platform":"d:\\ksana2015\\node_modules\\ksana-database\\platform.js","fs":false,"ksana2015-webruntime":"d:\\ksana2015\\node_modules\\ksana2015-webruntime\\index.js","path":false}],"d:\\ksana2015\\node_modules\\ksana-database\\platform.js":[function(require,module,exports){
+},{"./platform":"d:\\ksana2015\\node_modules\\ksana-database\\platform.js","fs":false,"path":false}],"d:\\ksana2015\\node_modules\\ksana-database\\platform.js":[function(require,module,exports){
 var getPlatform=function() {
 	if (typeof ksanagap=="undefined") {
 		platform="node";
