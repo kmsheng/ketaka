@@ -2457,6 +2457,7 @@ var Docview_tibetan = React.createClass({displayName: "Docview_tibetan",
       for(var i=0;i<markups.length;i++)
       {
         markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+this.state.pageid+"_"+markups[i].start;
+		markups[i].pagename=this.getPageName();
         markups[i].pageid=this.state.pageid;
         markups[i]._rev = markups[i].payload._rev;
       }
@@ -5917,7 +5918,7 @@ getInitialState: function() {
         React.createElement("button", {ref: "encrypted", id: "btnlogin", className: "btn btn-lg btn-success btn-block control_size", onClick: this.login}, "Log in"), 
         React.createElement("div", {className: "create_acc"}, React.createElement("a", {onClick: this.singup}, React.createElement("h4", null, "Create account")))
         ), 
-		React.createElement("div", {className: "col-md-5 col-md-offset-3"}, React.createElement("h6", null, "version. 0.0.04"))
+		React.createElement("div", {className: "col-md-5 col-md-offset-3"}, React.createElement("h6", null, "version. 0.0.05"))
        )
        )
     );

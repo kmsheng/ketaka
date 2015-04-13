@@ -70,6 +70,7 @@ var Docview_tibetan = React.createClass({
       for(var i=0;i<markups.length;i++)
       {
         markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+this.state.pageid+"_"+markups[i].start;
+		markups[i].pagename=this.getPageName();
         markups[i].pageid=this.state.pageid;
         markups[i]._rev = markups[i].payload._rev;
       }

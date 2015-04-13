@@ -58,6 +58,8 @@ Mac 環境下安裝
     $ sudo -R chmod 777 fonts
     $ sudo -R chmod 777 kangyur_images
 
+將kdb 檔案放入	/usr/local/Cellar/nginx/1.6.2/html/ketaka 內
+	
 修改nginx參數
 
     $ sudo cp /usr/local/Cellar/nginx/1.6.2/html/nginx.conf  /usr/local/etc/nginx/nginx.conf
@@ -68,7 +70,7 @@ Mac 環境下安裝
 		
 前往測試
 
-http://localhost/ketaka/index.html
+http://localhost/ketaka/
 
 安裝php-fpm
 
