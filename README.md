@@ -54,9 +54,9 @@ Mac 環境下安裝
 將 minimum requirement file 資料夾內檔案放入nginx路徑內 /usr/local/Cellar/nginx/1.6.2/html並開啟權限
 
     $ cd /usr/local/Cellar/nginx/1.6.2/html
-    $ sudo -R chmod 777 ketaka
-    $ sudo -R chmod 777 fonts
-    $ sudo -R chmod 777 kangyur_images
+    $ sudo chmod -R 777 ketaka
+    $ sudo chmod -R 777 fonts
+    $ sudo chmod -R 777 kangyur_images
 
 將kdb 檔案放入	/usr/local/Cellar/nginx/1.6.2/html/ketaka 內
 	
