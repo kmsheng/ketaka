@@ -9,6 +9,8 @@ var cssgen=require("./cssgen");
 //var linkbymenu=require("./linkbymenu.jsx");
 //var linktomenu=require("./linktomenu.jsx");//possible link to
 var React=require("react");
+var helper = require('./helper');
+
 var Docview = React.createClass({
   componentWillMount:function() {
     if (this.props.page) this.offsets=this.props.template.tokenize(this.props.page.inscription).offsets;
@@ -89,7 +91,7 @@ var Docview = React.createClass({
   },  
   getSelectedText:function(s,l) {
     if (!this.props.page || !this.props.page.inscription) return "";
-    s=s||this.state.selstart;
+    s = helper.isNumber(s) ? s : this.state.selstart;
     l=l||this.state.sellength;
 
     return this.props.page.inscription.substr(s,l);
@@ -246,7 +248,7 @@ var Docview = React.createClass({
       this.props.page.strikeout(ss,sl,username);
       this.setState({selstart:newstart+1,sellength:0});
     } else if (action=="addsuggestion") {
-      var ss=args[0]||this.state.selstart;
+      var ss = helper.isNumber(args[0]) ? args[0] : this.state.selstart;
       var sl=args[1]||this.state.sellength;
       var text=args[2]||"";
       if (sl>maxlen) return;
