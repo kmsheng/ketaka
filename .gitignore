@@ -1,3 +1,5 @@
 *.kdb
+*.*.swo
+*.*.swp
 bundle.js
 bundle.js.map
