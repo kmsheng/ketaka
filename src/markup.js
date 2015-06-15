@@ -70,12 +70,14 @@ var merge=function(markups,type){
 	if (typeof type=="undefined") throw "cannot merge "+type;
 	if (!out.length) return [];
 	out.sort(function(a,b){return a.s-b.s;});
-	var out2=[{s:out[0].s, l:1, payload:{type:type,choices:[out[0].payload]}}];
+
+  var out2 = [{s: out[0].s, l: 1, len: out[0].len, payload: {type: type, choices: [out[0].payload]}}];
+
 	for (i=1;i<out.length;i++) {
 		if (out[i].s===out2[out2.length-1].s ) {
 			out2[out2.length-1].payload.choices.push(out[i].payload);
 		} else {
-			out2.push({s:out[i].s,l:1,payload:{type:type,choices:[out[i].payload]}});
+      out2.push({s: out[i].s, l: 1, len: out[i].len, payload: {type: type, choices: [out[i].payload]}});
 		}
 	}
 	return combine(out2);
@@ -103,7 +105,8 @@ var applyTokenOffset=function(markups,offsets) {
 	for (var i=0;i<markups.length;i++) {
 		var m=markups[i];
 		m.start=offsets[m.s];
-		if(m.s == offsets.length-1) m.len = m.l;
+		if(m.s == offsets.length-1) {
+    }
 		else m.len=offsets[m.s+m.l] - offsets[m.s];
 		delete m.s;
 		delete m.l;
