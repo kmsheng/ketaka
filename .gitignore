@@ -1,1 +1,3 @@
 *.kdb
+bundle.js
+bundle.js.map
