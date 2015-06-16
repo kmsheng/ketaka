@@ -238,6 +238,29 @@ var Docview_tibetan = React.createClass({
       this.saveMarkup();
     } else if (type=="handUpdate") {
       this.getMarkups();
+    } else if ('scroll' === type) {
+
+      var caret = args[0].caret;
+      var node = this.refs.inlinetext.getDOMNode();
+      var inlinetext = {
+        top: node.offsetTop,
+        bottom: node.offsetTop + node.offsetHeight,
+        scrollHeight: node.scrollHeight
+      };
+
+      // handle scroll down
+      if (caret.bottom > inlinetext.bottom) {
+        var newScrollTop = node.scrollTop + (caret.bottom - inlinetext.bottom);
+        var scrollHeight = inlinetext.scrollHeight;
+        node.scrollTop = (newScrollTop > scrollHeight) ? scrollHeight : newScrollTop;
+      }
+
+      // handle scroll up
+      if (caret.top < inlinetext.top) {
+        var newScrollTop = node.scrollTop - (inlinetext.top - caret.top);
+        node.scrollTop = (newScrollTop < 0) ? 0 : newScrollTop;
+      }
+
     } else {
       return this.props.action.apply(this,arguments);
     }
@@ -416,7 +439,7 @@ var Docview_tibetan = React.createClass({
       <div className="docview_tibetan" style={{marginLeft:"20px",height:document.body.offsetHeight-68+"px"}}>
         <div>{this.getAlert()}</div>
         <div>{this.nav()}</div>
-        <div id="inlinetext" style={{height:document.body.offsetHeight-(document.body.offsetWidth -20)/4.17-110+"px",overflowY:"scroll",overflowX:"hidden"}}>
+        <div id="inlinetext" ref="inlinetext" style={{height:document.body.offsetHeight-(document.body.offsetWidth -20)/4.17-110+"px",overflowY:"scroll",overflowX:"hidden"}}>
         <Docview ref="docview"
             page={this.page()}
             pageid={this.state.pageid}

@@ -3,12 +3,14 @@ var hasClass=function (el, selector) {
    return (" " + el.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1;
 };
 
+var helper = require('./helper');
+
 var Create=function(_surface) {
 	var surface=_surface;
 	var caretnode,carettimer,shiftkey;
   var self = this;
 
-  var moveCaret=function(domnode) {
+  var moveCaret=function(domnode, direction) {
     if (!domnode) return; 
     caretnode=domnode;
     var rect=domnode.getBoundingClientRect();
@@ -22,6 +24,15 @@ var Create=function(_surface) {
     caretdiv.style.height=rect.height +"px";
     surface.refs.surface.getDOMNode().focus();
     surface.props.action("caretmoved",left,top,rect.height);
+
+    if (helper.inArray(['up', 'down'], direction)) {
+      surface.props.action('scroll', {
+        caret: {
+          top: caretdiv.offsetTop,
+          bottom: caretdiv.offsetTop + rect.height
+        }
+      });
+    }
     //this.moveInputBox(rect);
   };
 
@@ -82,7 +93,7 @@ var Create=function(_surface) {
       if (dis<mindis) {mindis=dis;closest=n;}
       n=n.previousSibling;
     }
-    moveCaret(closest);
+    moveCaret(closest, 'up');
   };
 
   var moveCaretDown=function(){
@@ -96,7 +107,7 @@ var Create=function(_surface) {
       if (dis<mindis) {mindis=dis;closest=n;}
       n=n.nextSibling;
     }
-    moveCaret(closest);
+    moveCaret(closest, 'down');
   };
 
 
