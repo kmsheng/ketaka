@@ -67,6 +67,19 @@ var Docview_tibetan = React.createClass({
          pouch.readallfrompouch(db,this.showmessage,1);
       }
       else if(markups.length != 0){
+
+        var self = this;
+        var used = {};
+
+        markups = markups.filter(function(row) {
+          var key = row.payload.author + ':' + self.getPageName() + ':' + self.state.pageid + ':' + row.start + ':' + row.len;
+          if (key in used) {
+            return false;
+          }
+          used[key] = true;
+          return true;
+        });
+
       for(var i=0;i<markups.length;i++)
       {
         markups[i]._id=dbname+"_"+markups[i].payload.author+"_"+this.state.pageid+"_"+markups[i].start;
