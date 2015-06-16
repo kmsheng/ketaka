@@ -195,6 +195,7 @@ var Surface = React.createClass({
     if (this.inlinedialogopened) {
       this.inlinedialogopened.style.display='none';
     }
+    this.caret.isDialogProcessing = false;
     this.inlinedialogopened=false;
     this.refs.surface.getDOMNode().focus();
     this.setState({markup:false})

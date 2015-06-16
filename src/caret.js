@@ -6,6 +6,7 @@ var hasClass=function (el, selector) {
 var Create=function(_surface) {
 	var surface=_surface;
 	var caretnode,carettimer,shiftkey;
+  var self = this;
 
   var moveCaret=function(domnode) {
     if (!domnode) return; 
@@ -153,6 +154,11 @@ this.keypress=function(e) {
   inlinedialog(String.fromCharCode(kc));
 }
 this.keydown=function(e) {
+
+  if (self.isDialogProcessing) {
+    return e.preventDefault;
+  }
+
    var prevent=true;
     shiftkey=e.shiftKey;
     var kc=e.which;
@@ -176,7 +182,10 @@ this.keydown=function(e) {
     else if (kc==46) strikeout();
     else if (kc==36) moveCaret(beginOfLine());
     else if (kc==35) moveCaret(endOfLine());
-    else if (kc==32) inlinedialog();
+    else if (32 === kc) {
+      self.isDialogProcessing = true;
+      inlinedialog();
+    }
     else if (kc==13) enter();
     else if (kc==27) surface.closeinlinedialog();
     else if (validchar(kc) || (kc>=112 && kc<=123))  {
