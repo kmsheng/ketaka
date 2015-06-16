@@ -47,14 +47,21 @@ var inlinedialog_applychange = React.createClass({
     this.props.action("nextmistake","next");
   },
   choices:function(name) {
+    var used = {};
     var out=[];
     for (var i=0;i<this.markup().choices.length;i++) {
+      var row = this.markup().choices[i];
+      var key = [row.type, row.author, row.text, row.reason].join(':');
+      if (key in used) {
+        continue;
+      }
       out.push(Change({
         ref:'o'+i,
         now:this.state.now,
         select:this.select,
         m:this.markup().choices[i],
         i:i,name:name}));
+      used[key] = true;
     }
     return out;
   },
