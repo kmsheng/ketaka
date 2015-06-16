@@ -175,6 +175,12 @@ var Surface = React.createClass({
       return;
     }
     if (!sel) return;
+
+    function rightClickedSuggestMarkup() {
+      var target = e.target;
+      return ('Caret' === window.getSelection().type) && target && target.className.match(/suggest/);
+    }
+
     if (e.button==2) {
       if (this.props.sellength>0) {
         if (sel.start>=this.props.selstart && sel.start<=this.props.selstart+this.props.sellength) {
@@ -182,6 +188,10 @@ var Surface = React.createClass({
           sel.len=this.props.sellength;
         } 
       } else if (sel.start>-1) {
+
+        if (rightClickedSuggestMarkup()) {
+          sel.start = parseInt(e.target.getAttribute('data-n'), 10);
+        }
         var next=this.nextTokenStart(sel.start);
         if (next) {
           sel.len=next-sel.start;
