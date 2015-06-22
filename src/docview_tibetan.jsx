@@ -147,17 +147,17 @@ var Docview_tibetan = React.createClass({
     var pageid=this.state.pageid;
     if (type=="next") {
       if (pageid+1<this.state.doc.pageCount) this.setState({pageid:pageid+1});
-      save=true;
-    } else if (type=="prev") {
+    }
+    else if (type=="prev") {
       if (pageid>1) this.setState({pageid:pageid-1});
-      save=true;
-    } else if (type=="first") {
-      save=true;
+    }
+    else if (type=="first") {
       this.setState({pageid:1});
-    } else if (type=="last") {
+    }
+    else if (type=="last") {
       this.setState({pageid:this.state.doc.pageCount-1});
-      save=true;
-    } else if (type=="gopage") {
+    }
+    else if (type=="gopage") {
       var page=this.state.doc.pageByName(args[0])
       if (page) {
         this.setState({pageid:page.id});
