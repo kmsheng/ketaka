@@ -39,7 +39,6 @@ var Docview = React.createClass({
   componentDidUpdate:function() {
     if ((this.state.newMarkupAt > -1) && (null !== this.state.newMarkupAt)) {
       this.refs.surface.openinlinedialog(this.state.newMarkupAt);
-      this.props.action('restoreScrollPosition');
     }
   },
   getInitialState: function() { 

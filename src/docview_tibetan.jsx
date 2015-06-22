@@ -241,7 +241,7 @@ var Docview_tibetan = React.createClass({
     } else if ('scroll' === type) {
 
       var caret = args[0].caret;
-      var node = this.refs.inlinetext.getDOMNode();
+      var node = this.refs.docview.refs.surface.refs.inlinetext.getDOMNode();
       var inlinetext = {
         top: node.offsetTop,
         bottom: node.offsetTop + node.offsetHeight,
@@ -261,13 +261,6 @@ var Docview_tibetan = React.createClass({
         node.scrollTop = (newScrollTop < 0) ? 0 : newScrollTop;
       }
 
-    }
-    else if ('restoreScrollPosition' === type) {
-      var node = this.refs.inlinetext.getDOMNode();
-      var scrollTop = node.scrollTop;
-      setTimeout(function() {
-        node.scrollTop = scrollTop;
-      }, 800);
     }
     else {
       return this.props.action.apply(this,arguments);
@@ -448,7 +441,6 @@ var Docview_tibetan = React.createClass({
       <div className="docview_tibetan" style={{marginLeft:"20px",height:document.body.offsetHeight-68+"px"}}>
         <div>{this.getAlert()}</div>
         <div>{this.nav()}</div>
-        <div id="inlinetext" ref="inlinetext" style={{height:document.body.offsetHeight-(document.body.offsetWidth -20)/4.17-110+"px",overflowY:"scroll",overflowX:"hidden"}}>
         <Docview ref="docview"
             page={this.page()}
             pageid={this.state.pageid}
@@ -462,7 +454,6 @@ var Docview_tibetan = React.createClass({
             autoselect={this.props.selection}
             action={this.action}
           ></Docview>
-          </div>
       </div>
       </div>
     );

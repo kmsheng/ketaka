@@ -375,17 +375,20 @@ var Surface = React.createClass({
     var xml=this.toXML(opts); 
  
     return (
-      <div  data-id={this.state.uuid} className="surface">
+      <div data-id={this.state.uuid} className="surface">
           {this.addInlinedialog()}
-          <div ref="surface" tabIndex="0" 
-            onKeyDown={this.caret.keydown} 
-            onKeyPress={this.caret.keypress} 
-            onClick={this.tokenclicked} 
-            onMouseDown={this.mouseDown}
-            onMouseUp={this.mouseUp}
-            onMouseMove={this.mouseMove}
-            >{xml}  
-          </div> 
+          <div id="inlinetext" ref="inlinetext"
+               style={{height: document.body.offsetHeight - (document.body.offsetWidth -20) / 4.17 - 110 + "px", overflowY: "scroll", overflowX: "hidden"}}>
+            <div ref="surface" tabIndex="0"
+              onKeyDown={this.caret.keydown} 
+              onKeyPress={this.caret.keypress} 
+              onClick={this.tokenclicked} 
+              onMouseDown={this.mouseDown}
+              onMouseUp={this.mouseUp}
+              onMouseMove={this.mouseMove}
+              >{xml}  
+            </div> 
+          </div>
           <div ref="caretdiv" className="surface-caret-container">
              <div ref="caret" className="surface-caret">|</div>
           </div>
