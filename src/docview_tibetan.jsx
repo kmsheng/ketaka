@@ -261,7 +261,15 @@ var Docview_tibetan = React.createClass({
         node.scrollTop = (newScrollTop < 0) ? 0 : newScrollTop;
       }
 
-    } else {
+    }
+    else if ('restoreScrollPosition' === type) {
+      var node = this.refs.inlinetext.getDOMNode();
+      var scrollTop = node.scrollTop;
+      setTimeout(function() {
+        node.scrollTop = scrollTop;
+      }, 800);
+    }
+    else {
       return this.props.action.apply(this,arguments);
     }
 

@@ -37,8 +37,9 @@ var Docview = React.createClass({
      else this.offsets=nextProps.template.tokenize(nextProps.page.inscription).offsets; 
   },
   componentDidUpdate:function() {
-    if (this.state.newMarkupAt > -1) {
+    if ((this.state.newMarkupAt > -1) && (null !== this.state.newMarkupAt)) {
       this.refs.surface.openinlinedialog(this.state.newMarkupAt);
+      this.props.action('restoreScrollPosition');
     }
   },
   getInitialState: function() { 
