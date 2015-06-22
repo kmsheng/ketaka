@@ -62,10 +62,11 @@ var nav_tibetan = React.createClass({
     }
   },
   handsavemarkup:function() {
-    this.props.action("handsavemarkup");
-  },
-  handUpdate:function() {
-    this.props.action("handUpdate");
+    var self = this;
+    self.props.action("handUpdate")
+      .then(function() {
+        self.props.action("handsavemarkup");
+      });
   },
   preview:function() {
     this.props.action("preview");
@@ -169,7 +170,6 @@ render: function() {
       <div className="col-md-4">
         {this.previewmenu()}
         <button className="btn btn-success button_style" onClick={this.handsavemarkup}>Save</button>
-        <button className="btn btn-success button_style" onClick={this.handUpdate}>Refresh</button>
       </div>
       </div>
     );

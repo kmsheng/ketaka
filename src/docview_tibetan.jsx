@@ -237,7 +237,7 @@ var Docview_tibetan = React.createClass({
       this.state.handsavestate = true;
       return this.saveMarkup();
     } else if (type=="handUpdate") {
-      this.getMarkups();
+      return this.getMarkups();
     } else if ('scroll' === type) {
 
       var caret = args[0].caret;
@@ -295,7 +295,6 @@ var Docview_tibetan = React.createClass({
        var db = new PouchDB('http://'+ip+':5984/'+dbname);
        var pagecount=-this.props.kde.pageCount;
        var mydb = [];
-       pouch.readallfrompouch(db,this.getMarkupsformpouch,0);    
       //persistentmarkup.loadMarkup(fn,-doc.pageCount,function(markups){
       //  doc.addMarkups(markups);
       //  that.setState({doc:doc,activeHits:that.getActiveHits()});  
@@ -316,6 +315,8 @@ var Docview_tibetan = React.createClass({
       this.setState({doc:doc});
     });*/
     if (this.props.tab ) this.props.tab.instance=this; // for tabui 
+
+    return pouch.readallfrompouch(db, this.getMarkupsformpouch, 0);
   },
   getMarkupsformpouch:function(res)
   {
