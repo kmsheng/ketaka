@@ -1,20 +1,21 @@
 {
- "name": "ketaka",
- "description": "Taibetan Proofreader",
- "version": "0.0.1",
- "main": "index.html",
-  "inject-js-start":"nwmain.js",
- "single-instance": true,
- "window": {
-  "toolbar": true,
-  "width": 1400,
-  "height": 860,
-  "icon": "dhammagear.png"
- },
- "repositories": [
-  {
-   "type": "git",
-   "url": "git@github.com:karmapa17/ketaka.git"
+  "name": "ketaka",
+  "description": "Taibetan Proofreader",
+  "version": "0.0.1",
+  "main": "index.html",
+  "inject-js-start": "nwmain.js",
+  "single-instance": true,
+  "window": {
+    "toolbar": true,
+    "width": 1400,
+    "height": 860,
+    "icon": "dhammagear.png"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:karmapa17/ketaka.git"
+  },
+  "dependencies": {
+    "q": "^1.4.1"
   }
- ]
 }
