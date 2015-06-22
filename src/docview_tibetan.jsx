@@ -423,7 +423,7 @@ var Docview_tibetan = React.createClass({
     return imageheight;
   },
   closeAlert:function(e) {
-      $(".alert_err").delay(200).addClass("in").fadeOut(200);
+      $(".alert_err").delay(200).addClass("in").fadeOut(50);
   },
   getAlert:function() {
     return  ( <div><div className="alert_ok alert-success" style={{width:window.innerWidth*0.95}}>
