@@ -18,6 +18,8 @@ var Buildindex=require("./buildindex.jsx");
 var kde=require("ksana-database");
 var kse=require("ksana-search");
 var pouch=require("./persistentmarkup_pouchdb");
+var bridge = require('./bridge.js');
+
 
 //var passwords=require("./passwd");
 var React=require("react"); 
@@ -196,6 +198,9 @@ var main = React.createClass({
 
     if (type==="setdoc") { 
       this.setState({doc:args[0]});
+    }
+    else if ('clearActiveQuery' === type) {
+      bridge.broadcast('clearDocviewActiveHits');
     } else if (type=="openproject") { 
       var proj=args[0]; 
       var autoopen=args[1];
@@ -411,12 +416,19 @@ var main = React.createClass({
     this.action("index");
   },
   search:function(keyword) {
+    var self = this;
     if(this.state.tabs[1].pjname == "") {this.action("myalert",1);;return;}
     var node=$(this.refs.btn1.getDOMNode());
     node.popover({html:true});
     node.data("content", <Searchmain/> );
     node.data("action", this.action)
+
+    node.on('hidden.bs.popover', function() {
+      self.action('clearActiveQuery');
+    });
+
     node.popover('show');
+
     var $popcontent=node.siblings(".popover").find(".popover-content")
     React.renderComponent(<Searchmain action={this.action} keyword={keyword} bambos={this.state.tabs} db={this.state.tabs[1].pjname} engine={this.state.tabs[1].pjname}/>,$popcontent[0]);
   },

@@ -9,6 +9,7 @@ var isSkip=require("ksana-analyzer").getAPI("tibetan1").isSkip;
 var legacy2014=require("./legacy2014");
 var pouch=require("./persistentmarkup_pouchdb");
 var Nav_tibetan=require("./nav_tibetan.jsx");
+var bridge = require('./bridge.js');
 
 var Docview_tibetan = React.createClass({
   getInitialState: function() {
@@ -276,7 +277,14 @@ var Docview_tibetan = React.createClass({
     return D.createDocument(fromserver.kd,fromserver.kdm);
   }, 
   componentDidMount:function() {
-      this.getMarkups();
+    var self = this;
+    self.getMarkups();
+
+    bridge.on('clearDocviewActiveHits', function() {
+      console.log('on clearDocviewActiveHits');
+      self.props.kde.activeQuery = null;
+      self.updateActiveHits();
+    });
   }, 
   cancel_markup:function(name,start,dbname)
   {
@@ -329,6 +337,10 @@ var Docview_tibetan = React.createClass({
         doc.addMarkups(mydb);
         that.setState({doc:doc,activeHits:that.getActiveHits()});
     });
+  },
+  updateActiveHits: function() {
+    var self = this;
+    self.setState({activeHits: self.getActiveHits()});
   },
   watch_suggest:function()
   {
@@ -410,6 +422,7 @@ var Docview_tibetan = React.createClass({
       file:this.props.filename,time:today};
     localStorage.setItem(this.props.user.name+".lastfile",JSON.stringify(lastfile));
     this.saveMarkup();
+    bridge.off('clearDocviewActiveHits');
   },
   nav:function() {
     var params={ref:"navigator" ,user:this.props.user, preview:this.state.preview,
