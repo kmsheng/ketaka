@@ -21,20 +21,36 @@ var nav_tibetan = React.createClass({
     this.pageidtimer=setTimeout(this.setPageId.bind(this) ,5000);
   },
   nextPage:function() {
-    this.props.action("next");
-    this.scrolltoTop(); 
+    var self = this;
+    self.props.action("handsavemarkup")
+      .then(function() {
+        self.props.action("next");
+        self.scrolltoTop();
+      });
   },
   prevPage:function() {
-    this.props.action("prev");
-    this.scrolltoTop(); 
+    var self = this;
+    self.props.action("handsavemarkup")
+      .then(function() {
+        self.props.action("prev");
+        self.scrolltoTop();
+      });
   },
   firstPage:function() {
-    this.props.action("first");
-    this.scrolltoTop(); 
+    var self = this;
+    self.props.action("handsavemarkup")
+      .then(function() {
+        self.props.action("first");
+        self.scrolltoTop();
+      });
   },
   lastPage:function() {
-    this.props.action("last");
-    this.scrolltoTop(); 
+    var self = this;
+    self.props.action("handsavemarkup")
+      .then(function() {
+        self.props.action("last");
+        self.scrolltoTop();
+      });
   },
   nextMistake:function(e) {
     var direction = e.target.id;

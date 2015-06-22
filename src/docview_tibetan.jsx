@@ -48,7 +48,7 @@ var Docview_tibetan = React.createClass({
     var markups=this.page().filterMarkup(function(m){return m.payload.author==username});
     if(this.props.user.admin == true)  markups = this.change_suggests(markups,0);
     var dbid=this.props.kde.dbname;
-    this.saveMarkuptoPouchdb(filename,markups);
+    return this.saveMarkuptoPouchdb(filename,markups);
 	
     /*
     this.$ksana("saveMarkup",{dbid:dbid,markups:markups,filename:filename,i:this.state.pageid } ,function(data){
@@ -64,7 +64,7 @@ var Docview_tibetan = React.createClass({
       var db = new PouchDB('http://'+ip+':5984/'+dbname);
       if (markups.length == 0)
       {
-         pouch.readallfrompouch(db,this.showmessage,1);
+         return pouch.readallfrompouch(db,this.showmessage,1);
       }
       else if(markups.length != 0){
       for(var i=0;i<markups.length;i++)
@@ -74,7 +74,7 @@ var Docview_tibetan = React.createClass({
         markups[i].pageid=this.state.pageid;
         markups[i]._rev = markups[i].payload._rev;
       }
-      pouch.savealltopouch(db,markups,this.showmessage);
+      return pouch.savealltopouch(db,markups,this.showmessage);
     }
   },
    showmessage:function(err) {
@@ -235,7 +235,7 @@ var Docview_tibetan = React.createClass({
       //do fuzzy search
     } else if (type=="handsavemarkup") {
       this.state.handsavestate = true;
-      this.saveMarkup();
+      return this.saveMarkup();
     } else if (type=="handUpdate") {
       this.getMarkups();
     } else if ('scroll' === type) {

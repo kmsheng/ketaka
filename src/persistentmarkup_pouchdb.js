@@ -78,7 +78,7 @@ var savetopouch=function(db,data,cb) {
     });
 }
 var savealltopouch=function(db,data,cb) {
-	db.bulkDocs(data,function(err, res) {
+	return db.bulkDocs(data,function(err, res) {
         cb(err);
      });
 }
@@ -94,7 +94,7 @@ var readfrompouch=function(db,data,cb,state,data2) {
 	});
 }
 var readallfrompouch=function(db,cb,state) {
-	db.allDocs({include_docs: true},function(err, res) {
+	return db.allDocs({include_docs: true},function(err, res) {
 	    if(res.rows.length==0) db.destroy(function(err, info) { });
         if(state == 0) cb(res);
         else if(state == 1) cb(err);
