@@ -17,26 +17,12 @@ var Docview_tibetan = React.createClass({
     var pageid=1;
     return {doc:null,pageid:pageid};
   },
-  shouldComponentUpdate:function(nextProps,nextState) {
-      var samehit=JSON.stringify(this.state.activeHits)==JSON.stringify(nextState.activeHits);
-      var r=true;
-      if (nextProps.pageid!=this.props.pageid) {
-        nextState.pageid=nextProps.pageid;
-      } 
-      else if 
-         (this.state.doc==nextState.doc && this.state.pageid==nextState.pageid
-        &&this.state.selecting==nextState.selecting
-        &&samehit
-        &&this.state.preview==nextState.preview) return false;  //this is a work-around ... children under this component is causing recursive update
-
-      if (this.props.kde.activeQuery&&samehit) {
-        var that=this;
-        setTimeout(function(){
-          that.setState( {activeHits: that.getActiveHits()} );
-        },100)
-      }
-
-      return r;
+  shouldComponentUpdate: function(nextProps, nextState) {
+    var nextPageId = nextProps.pageid;
+    if (this.props.pageid !== nextPageId) {
+      this.setState({pageid: nextPageId});
+    }
+    return true;
   },
   storekey:function() {
     return this.props.project.shortname+'.pageid';
@@ -281,7 +267,6 @@ var Docview_tibetan = React.createClass({
     self.getMarkups();
 
     bridge.on('clearDocviewActiveHits', function() {
-      console.log('on clearDocviewActiveHits');
       self.props.kde.activeQuery = null;
       self.updateActiveHits();
     });
@@ -463,7 +448,7 @@ var Docview_tibetan = React.createClass({
             customfunc={this.props.kde.customfunc}
             styles={styles}
             isSkip={isSkip}
-            hits={this.state.activeHits}
+            hits={this.getActiveHits()}
             autoselect={this.props.selection}
             action={this.action}
           ></Docview>
