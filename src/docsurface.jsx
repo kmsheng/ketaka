@@ -119,7 +119,11 @@ var Surface = React.createClass({
     if (!e.target.attributes['data-n']) return;
     var n=e.target.attributes['data-n'].value;
     if (n) this.openinlinedialog(n);
-    return (!!n);
+
+    if (! n) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   },
   mouseDown:function(e) {
     if (this.inlinedialogopened) {
