@@ -10,7 +10,7 @@ var element_comment_tibetan = React.createClass({
   },
   render: function() {
     return ( 
-    <span tabindex="0" href="#" className="viewonlyHolder" 
+    <span tabIndex="0" href="#" className="viewonlyHolder" 
           data-toggle="popover" 
           onClick={this.openViewonly} 
           data-trigger="focus" 
