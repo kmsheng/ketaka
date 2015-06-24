@@ -11,6 +11,30 @@
     "height": 860,
     "icon": "dhammagear.png"
   },
+  "dependencies": {
+    "glob": "5.0.10",
+    "ksana-analyzer": "git+https://github.com/ksanaforge/ksana-analyzer.git#9b14dac970",
+    "ksana-database": "git+https://github.com/ksanaforge/ksana-database.git#217b8ece03",
+    "ksana-indexer": "git+https://github.com/ksanaforge/ksana-indexer.git#325a53b17a",
+    "ksana-jsonrom": "git+https://github.com/ksanaforge/ksana-jsonrom.git#3cea5119a5",
+    "ksana-parser-docx": "git+https://github.com/ksanaforge/ksana-parser-docx.git#899b8e0861",
+    "ksana-search": "git+https://github.com/ksanaforge/ksana-search.git#6be78180fd",
+    "ksana2015-webruntime": "git+https://github.com/ksanaforge/ksana2015-webruntime.git#866205a64b",
+    "ksana2015-components": "git+https://github.com/ksanaforge/ksana2015-components.git#4d40b1e4cd",
+    "ksana2015-scaffold-default": "git+https://github.com/ksanaforge/ksana2015-scaffold-default.git#0a1d52ef78",
+    "ksana2015-scaffold-reflux": "git+https://github.com/ksanaforge/ksana2015-scaffold-reflux.git#64c99477d1",
+    "ksana2015-stacktoc": "git+https://github.com/ksanaforge/ksana2015-stacktoc.git#bfb1cc8d9b",
+    "ksana2015-treetoc": "git+https://github.com/ksanaforge/ksana2015-treetoc.git#a4ac2b4ed8",
+    "ksana2015-swipe": "git+https://github.com/ksanaforge/ksana2015-swipe.git#e22b6a6b3e",
+    "ksana2015-swipe3-ui": "git+https://github.com/ksanaforge/ksana2015-swipe3-ui.git#09fa09ef67",
+    "firebase": "2.2.7",
+    "reactify": "1.1.1",
+    "react": "0.13.3",
+    "reflux": "0.2.8",
+    "sax": "1.1.1",
+    "tibetan":"1.0.4",
+    "react-panels":"2.5.1"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:karmapa17/ketaka.git"
