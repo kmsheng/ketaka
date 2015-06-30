@@ -93,6 +93,9 @@ var mainsearch = React.createClass({
         }, 200);
      });
   },
+  onCloseButtonClick: function() {
+     this.props.action('closeSearchPopup');
+  },
   stopFiltering:function(){
     clearInterval(this.timer1);
     this.stop=true;
@@ -145,6 +148,7 @@ var mainsearch = React.createClass({
     return ( 
       <div>
         <div className="row searcharea">
+          <button className="close" type="button" onClick={this.onCloseButtonClick}>×</button>
           <div className="col-md-12"><Searchbox action={this.action} kw={this.props.keyword} progress={this.state.progress} wildcard={this.state.wildcard}/></div>
           <div className="col-md-3">
             <Queryinfo action={this.action} Q={this.state.Q} />

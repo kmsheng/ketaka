@@ -19,7 +19,7 @@ var kde=require("ksana-database");
 var kse=require("ksana-search");
 var pouch=require("./persistentmarkup_pouchdb");
 var bridge = require('./bridge.js');
-
+var initPopover = false;
 
 //var passwords=require("./passwd");
 var React=require("react"); 
@@ -89,7 +89,7 @@ var main = React.createClass({
     var tabs=this.defaultMainTabs();
     //var auxs=this.defaultAuxTabs();
 
-    return {settings:null,tabs:tabs/*, auxs:auxs*/,pageid:1,error:"",db:null,projects:null,keyword:null, initPopover: false};
+    return {settings:null,tabs:tabs/*, auxs:auxs*/,pageid:1,error:"",db:null,projects:null,keyword:null};
   },
   addProjectTab:function(projects) {
       var tabs=this.state.tabs;
@@ -199,8 +199,13 @@ var main = React.createClass({
     if (type==="setdoc") { 
       this.setState({doc:args[0]});
     }
-    else if ('clearActiveQuery' === type) {
+    else if ('closeSearchPopup' === type) {
+
       bridge.broadcast('clearDocviewActiveHits');
+
+      var node = $(this.refs.btn1.getDOMNode());
+      node.popover('hide');
+
     } else if (type=="openproject") { 
       var proj=args[0]; 
       var autoopen=args[1];
@@ -419,17 +424,14 @@ var main = React.createClass({
     var self = this;
     if(this.state.tabs[1].pjname == "") {this.action("myalert",1);;return;}
 
-    var node=$(this.refs.btn1.getDOMNode());
+    var node = $(this.refs.btn1.getDOMNode());
 
-    if (! self.state.initPopover) {
+    if (! initPopover) {
       node.popover({html:true});
       node.data("content", <Searchmain/> );
       node.data("action", this.action)
-      self.setState({initPopover: true});
+      initPopover = true;
     }
-    node.on('hidden.bs.popover', function() {
-      self.action('clearActiveQuery');
-    });
 
     node.popover('show');
 
@@ -455,7 +457,7 @@ var main = React.createClass({
     $('html').on('click', function(e) {
     if ((typeof $(e.target).data('original-title') == 'undefined'|| (typeof $(e.target).data('original-title') == 'string')) &&
     !$(e.target).parents().is('.popover.in')) {
-    $('[data-original-title]').popover('destroy');
+ //   $('[data-original-title]').popover('destroy');
     }
   });
   return <div>

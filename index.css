@@ -456,6 +456,9 @@ textarea {
 	top:-230px;
 }
 .searcharea {height:60%;}
+.searcharea button.close {
+  margin-bottom: 10px;
+}
 .pagetextarea {height:40%;}
 .row {
     width:99.99%;
