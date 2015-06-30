@@ -89,7 +89,7 @@ var main = React.createClass({
     var tabs=this.defaultMainTabs();
     //var auxs=this.defaultAuxTabs();
 
-    return {settings:null,tabs:tabs/*, auxs:auxs*/,pageid:1,error:"",db:null,projects:null,keyword:null};
+    return {settings:null,tabs:tabs/*, auxs:auxs*/,pageid:1,error:"",db:null,projects:null,keyword:null, initPopover: false};
   },
   addProjectTab:function(projects) {
       var tabs=this.state.tabs;
@@ -418,11 +418,15 @@ var main = React.createClass({
   search:function(keyword) {
     var self = this;
     if(this.state.tabs[1].pjname == "") {this.action("myalert",1);;return;}
-    var node=$(this.refs.btn1.getDOMNode());
-    node.popover({html:true});
-    node.data("content", <Searchmain/> );
-    node.data("action", this.action)
 
+    var node=$(this.refs.btn1.getDOMNode());
+
+    if (! self.state.initPopover) {
+      node.popover({html:true});
+      node.data("content", <Searchmain/> );
+      node.data("action", this.action)
+      self.setState({initPopover: true});
+    }
     node.on('hidden.bs.popover', function() {
       self.action('clearActiveQuery');
     });
