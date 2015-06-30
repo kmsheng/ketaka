@@ -225,9 +225,24 @@ var Docview_tibetan = React.createClass({
       return this.saveMarkup();
     } else if (type=="handUpdate") {
       return this.getMarkups();
-    } else if ('scroll' === type) {
+    }
+    else if ('scrollTop' === type) {
+      var delta = 20;
+      var node = this.refs.docview.refs.surface.refs.inlinetext.getDOMNode();
+      var newScrollTop = node.scrollTop - delta;
+      node.scrollTop = (newScrollTop < 0) ? 0 : newScrollTop;
+    }
+    else if ('scrollBottom' === type) {
+      var delta = 20;
+      var node = this.refs.docview.refs.surface.refs.inlinetext.getDOMNode();
+      var scrollHeight = node.scrollHeight;
+      var newScrollTop = node.scrollTop + delta;
+      node.scrollTop = (newScrollTop > scrollHeight) ? scrollHeight : newScrollTop;
+    }
+    else if ('scroll' === type) {
 
       var caret = args[0].caret;
+      var direction = args[0].direction;
       var node = this.refs.docview.refs.surface.refs.inlinetext.getDOMNode();
       var inlinetext = {
         top: node.offsetTop,

@@ -86,7 +86,10 @@ var Create=function(_surface) {
     var n=beginOfLine(),ox=caretnode.offsetLeft, oy=caretnode.offsetTop;
     var mindis=100000000, closest=null;
     if (!n) return;
-    if (n.previousSibling==null) return;//top line
+    if (n.previousSibling==null) {
+        surface.props.action('scrollTop');
+        return;//top line
+    }
     n=n.previousSibling;
     while (n) {
       var dis=distance(ox,oy,n.offsetLeft,n.offsetTop);
@@ -100,7 +103,10 @@ var Create=function(_surface) {
     var n=endOfLine(),ox=caretnode.offsetLeft, oy=caretnode.offsetTop;
     if (!n) return;
     var mindis=100000000, closest=null;
-    if (n.nextSibling==null) return;//top line
+    if (n.nextSibling==null) {
+        surface.props.action('scrollBottom');
+        return;//top line
+    }
     n=n.nextSibling;
     while (n) {
       var dis=distance(ox,oy,n.offsetLeft,n.offsetTop);
