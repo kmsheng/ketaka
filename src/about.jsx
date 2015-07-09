@@ -15,6 +15,12 @@ var about = React.createClass({
   popoverphoto_error:function() {
      this.getDOMNode().querySelector('#pop_photo').src = 'images/photo.png';
   },
+  onProfileDivClicked: function(e) {
+    if (! e.target.classList.contains('btn-page-profile')) {
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+    }
+  },
   getadmin:function() {
     if(this.props.tab[0].profile.admin ==true && this.props.tab[0].profile.su ==true){
       return "Administrator";
@@ -26,11 +32,11 @@ var about = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div onClick={this.onProfileDivClicked}>
          <div className="col-md-5"><img src={"photo/"+this.props.tab[0].text+".jpg?"+ new Date().getTime()} className="photo_style" id="pop_photo" onError={this.popoverphoto_error}></img></div>
          <div className="col-md-7"><h4>{this.props.tab[0].profile.name}</h4>
          <h2 className="label label-info">{this.getadmin()}</h2><br /><br />
-         <div><button className="btn btn-block btn-success col-md-1 about_button_style"onClick={this.pro_profile}>Profile</button>
+         <div><button className="btn-page-profile btn btn-block btn-success col-md-1 about_button_style"onClick={this.pro_profile}>Profile</button>
          <button className="btn btn-block btn-success pull-right about_button_style" onClick={this.pro_logout}>Logout</button>
          </div>
          </div>

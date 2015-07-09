@@ -20,6 +20,7 @@ var kse=require("ksana-search");
 var pouch=require("./persistentmarkup_pouchdb");
 var bridge = require('./bridge.js');
 var initPopover = false;
+var profileButton = null;
 
 //var passwords=require("./passwd");
 var React=require("react"); 
@@ -112,6 +113,12 @@ var main = React.createClass({
     this.setState({dialog:false,quota:quota,usage:usage});
     this.enumProjects();
     this.makescrollable();
+
+    document.addEventListener('click', function(e) {
+      if (profileButton) {
+        profileButton.popover('hide');
+      }
+    });
   },
   /*
   newsearchtab:function(proj) {
@@ -438,7 +445,10 @@ var main = React.createClass({
     var $popcontent=node.siblings(".popover").find(".popover-content")
     React.renderComponent(<Searchmain action={this.action} keyword={keyword} bambos={this.state.tabs} db={this.state.tabs[1].pjname} engine={this.state.tabs[1].pjname}/>,$popcontent[0]);
   },
-  pop_profile:function() {
+  pop_profile:function(e) {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
     var node=$(this.refs.btn2.getDOMNode());
     node.popover({html:true});
     node.data("content", <About/> );
@@ -446,6 +456,8 @@ var main = React.createClass({
     node.popover('show');
     var $popcontent=node.siblings(".popover").find(".popover-content")
     React.renderComponent(<About action={this.action} db={this.state.projects[0].shortname} tab={this.state.tabs} project={this.state.projects[0]} />,$popcontent[0]);
+
+    profileButton = node;
   },
   setting_button:function() {
     if(this.state.tabs[0].profile.su == true) return <span><img src="images/setting.png" className="top_icon" onClick={this.user_profile}></img></span>
